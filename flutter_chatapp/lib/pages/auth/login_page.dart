@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatapp/pages/auth/register_page.dart';
 import 'package:flutter_chatapp/service/auth_service.dart';
+import 'package:flutter_chatapp/service/database_service.dart';
 import 'package:flutter_chatapp/widgets/widgets.dart';
 
+import '../../helper/helper_function.dart';
 import '../home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -166,6 +170,14 @@ class _LoginPageState extends State<LoginPage> {
           .loginWithUserEmailandPassword(email, password)
           .then((value) async {
         if (value == true) {
+          QuerySnapshot snapshot =
+              await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                  .getUserData(email);
+
+          // saving the value to the shared preferences
+          await HelperFunctions.saveUserLoggedInStatus(true);
+          await HelperFunctions.saveUserEmailSF(email);
+          await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
           nextScreenReplace(context, HomePage());
         } else {
           showSnackbar(context, Color.fromARGB(255, 255, 0, 0), value);
