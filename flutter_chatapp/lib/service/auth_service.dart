@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_chatapp/helper/helper_function.dart';
 
 import 'database_service.dart';
 
@@ -25,4 +26,14 @@ class AuthService {
   }
 
   // signout
+  Future signOut() async {
+    try {
+      await HelperFunctions.saveUserLoggedInStatus(false);
+      await HelperFunctions.saveUserEmailSF("");
+      await HelperFunctions.saveUserNameSF("");
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }
