@@ -148,8 +148,6 @@ class _HomePageState extends State<HomePage> {
                         ],
                       );
                     });
-                // authService.signOut().whenComplete(
-                //     () => nextScreenReplace(context, const LoginPage()));
               },
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 32, vertical: 5),
