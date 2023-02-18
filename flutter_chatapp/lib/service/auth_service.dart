@@ -6,6 +6,18 @@ import 'database_service.dart';
 class AuthService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   // login
+  Future loginWithUserEmailandPassword(String email, String password) async {
+    try {
+      User user = (await firebaseAuth.signInWithEmailAndPassword(
+              email: email, password: password))
+          .user!;
+      if (user != null) {
+        return true;
+      }
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
+  }
 
   // register
   Future registerUserWithEmailandPassword(
@@ -17,7 +29,6 @@ class AuthService {
       if (user != null) {
         // call the database service to update the user data
         DatabaseService(uid: user.uid).updateUserData(fullName, email);
-
         return true;
       }
     } on FirebaseAuthException catch (e) {

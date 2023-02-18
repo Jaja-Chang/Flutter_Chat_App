@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatapp/pages/home_page.dart';
@@ -176,7 +178,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  // dummy register function
+  // register function
   register() async {
     if (formKey.currentState!.validate()) {
       setState(() {
@@ -199,5 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       });
     }
+    // ignore: avoid_print
+    print("There is something wrong with the formkey.");
   }
 }
