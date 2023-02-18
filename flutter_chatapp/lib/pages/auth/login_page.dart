@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatapp/widgets/widgets.dart';
 
@@ -112,7 +113,25 @@ class _LoginPageState extends State<LoginPage> {
                       login();
                     },
                   ),
-                )
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text.rich(TextSpan(
+                  text: "Don't have an account? ",
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 0, 0, 0), fontSize: 14),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: "Register here!",
+                        style: const TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            decoration: TextDecoration.underline),
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          nextScreen(context, page)
+                        })
+                  ],
+                ))
               ],
             ),
           ),
