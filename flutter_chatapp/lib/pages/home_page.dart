@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
               child: Text("LOGOUT"),
               onPressed: () {
                 authService.signOut();
+                nextScreenReplace(context, LoginPage());
               })),
     );
   }
