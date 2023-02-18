@@ -1,9 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chatapp/pages/auth/login_page.dart';
-import 'package:flutter_chatapp/service/auth_service.dart';
+import 'package:flutter_chatapp/pages/home_page.dart';
+import '../../pages/auth/login_page.dart';
 
+import '../../helper/helper_function.dart';
 import '../../widgets/widgets.dart';
+import '../../service/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -182,9 +184,13 @@ class _RegisterPageState extends State<RegisterPage> {
       });
       await authService
           .registerUserWithEmailandPassword(fullName, email, password)
-          .then((value) {
+          .then((value) async {
         if (value == true) {
           // saving the shared preference state
+          await HelperFunctions.saveUserLoggedInStatus(true);
+          await HelperFunctions.saveUserEmailSF(email);
+          await HelperFunctions.saveUserNameSF(fullName);
+          nextScreenReplace(context, HomePage());
         } else {
           showSnackbar(context, Color.fromARGB(255, 255, 0, 0), value);
           setState(() {
