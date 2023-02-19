@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatapp/helper/helper_function.dart';
 import 'package:flutter_chatapp/pages/auth/login_page.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_chatapp/pages/auth/profile_page.dart';
 import 'package:flutter_chatapp/pages/search_page.dart';
 import 'package:flutter_chatapp/service/auth_service.dart';
 import 'package:flutter_chatapp/service/database_service.dart';
+import 'package:flutter_chatapp/widgets/group_tile.dart';
 import 'package:flutter_chatapp/widgets/widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,6 +28,17 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     gettingUserData();
+  }
+
+  // string manipulation
+  // get group ID
+  String getId(String res) {
+    return res.substring(0, res.indexOf("_"));
+  }
+
+  // get group name
+  String getName(String res) {
+    return res.substring(res.indexOf("_") + 1);
   }
 
   gettingUserData() async {
@@ -288,7 +299,14 @@ class _HomePageState extends State<HomePage> {
         if (snapshot.hasData) {
           if (snapshot.data['groups'] != null &&
               snapshot.data['groups'].length != 0) {
-            return const Text("HELLOOOO");
+            return ListView.builder(
+                itemCount: snapshot.data['groups'].length,
+                itemBuilder: (context, index) {
+                  return GroupTile(
+                      groupId: getId(snapshot.data['groups'][index]),
+                      groupName: getName(snapshot.data['groups'][index]),
+                      userName: snapshot.data['fullName']);
+                });
           }
           return noGroupWidget();
         }
