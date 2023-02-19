@@ -199,6 +199,7 @@ class _HomePageState extends State<HomePage> {
 
   popUpDialog(BuildContext context) {
     showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -244,6 +245,37 @@ class _HomePageState extends State<HomePage> {
                       ),
               ],
             ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor),
+                child: const Text("CANCEL"),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  if (groupName != "") {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                        .createGroup(userName,
+                            FirebaseAuth.instance.currentUser!.uid, groupName)
+                        .whenComplete(() {
+                      _isLoading = false;
+                    });
+                    Navigator.of(context).pop();
+                    showSnackbar(
+                        context, Colors.green, "Chat created successfully!");
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor),
+                child: const Text("CREATE"),
+              )
+            ],
           );
         });
   }
