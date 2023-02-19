@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   String email = "";
   AuthService authService = AuthService();
   Stream? groups;
+  bool _isLoading = false;
+  String groupName = "";
 
   @override
   void initState() {
@@ -195,7 +197,56 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  popUpDialog(BuildContext context) {}
+  popUpDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text(
+              "Create a chat",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  color: Color.fromARGB(255, 5, 94, 84),
+                  fontSize: 17,
+                  fontWeight: FontWeight.w900),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Color.fromARGB(255, 4, 173, 153),
+                        ),
+                      )
+                    : TextField(
+                        onChanged: (val) {
+                          setState(() {
+                            groupName = val;
+                          });
+                        },
+                        decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromARGB(255, 4, 173, 153),
+                                    width: 1.5),
+                                borderRadius: BorderRadius.circular(10)),
+                            errorBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromARGB(255, 173, 4, 4),
+                                    width: 1.5),
+                                borderRadius: BorderRadius.circular(10)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromARGB(255, 4, 173, 153),
+                                    width: 1.5),
+                                borderRadius: BorderRadius.circular(10))),
+                      ),
+              ],
+            ),
+          );
+        });
+  }
 
   groupList() {
     return StreamBuilder(
