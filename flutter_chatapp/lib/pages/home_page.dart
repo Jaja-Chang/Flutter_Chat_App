@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatapp/helper/helper_function.dart';
 import 'package:flutter_chatapp/pages/auth/login_page.dart';
 import 'package:flutter_chatapp/pages/auth/profile_page.dart';
 import 'package:flutter_chatapp/pages/search_page.dart';
 import 'package:flutter_chatapp/service/auth_service.dart';
+import 'package:flutter_chatapp/service/database_service.dart';
 import 'package:flutter_chatapp/widgets/widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   String userName = "";
   String email = "";
   AuthService authService = AuthService();
+  Stream? groups;
 
   @override
   void initState() {
@@ -42,6 +46,15 @@ class _HomePageState extends State<HomePage> {
       } else {
         print("Something went wrong! Can't get user name from SF.");
       }
+    });
+
+    // getting the lsit of snapshots in the steam
+    await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+        .getUserGroup()
+        .then((snapshot) {
+      setState(() {
+        groups = snapshot;
+      });
     });
   }
 
@@ -168,6 +181,68 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      body: groupList(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          popUpDialog(context);
+        },
+        backgroundColor: Theme.of(context).primaryColor,
+        child: const Icon(
+          Icons.add,
+          size: 30,
+        ),
+      ),
     );
+  }
+
+  popUpDialog(BuildContext context) {}
+
+  groupList() {
+    return StreamBuilder(
+      stream: groups,
+      builder: (context, AsyncSnapshot snapshot) {
+        // make some checks
+        if (snapshot.hasData) {
+          if (snapshot.data['groups'] != null &&
+              snapshot.data['groups'].length != 0) {
+            return const Text("HELLOOOO");
+          }
+          return noGroupWidget();
+        }
+        return const Center(
+          child: CircularProgressIndicator(
+            color: Color.fromARGB(255, 4, 173, 153),
+          ),
+        );
+      },
+    );
+  }
+
+  noGroupWidget() {
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 25),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () {
+                popUpDialog(context);
+              },
+              child: const Icon(
+                Icons.add_circle,
+                color: Color.fromARGB(255, 149, 185, 181),
+                size: 75,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              "You haven't joined any chats yet, tap on the add icon to create a new chat or tap on the search icon to search for a chat.",
+              textAlign: TextAlign.center,
+            )
+          ],
+        ));
   }
 }

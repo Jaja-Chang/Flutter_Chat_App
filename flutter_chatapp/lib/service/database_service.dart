@@ -9,7 +9,7 @@ class DatabaseService {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection("users");
 
-  final CollectionReference GroupCollection =
+  final CollectionReference groupCollection =
       FirebaseFirestore.instance.collection("groups");
 
   // updating the user data
@@ -17,7 +17,7 @@ class DatabaseService {
     return await userCollection.doc(uid).set({
       "fullName": fullName,
       "email": email,
-      "group": [],
+      "groups": [],
       "profilePic": "",
       "uid": uid,
     });
@@ -28,5 +28,10 @@ class DatabaseService {
     QuerySnapshot snapshot =
         await userCollection.where("email", isEqualTo: email).get();
     return snapshot;
+  }
+
+  // getting user groups (chats)
+  getUserGroup() async {
+    return userCollection.doc(uid).snapshots();
   }
 }

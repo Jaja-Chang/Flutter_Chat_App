@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter_chatapp/helper/helper_function.dart';
 import 'package:flutter_chatapp/pages/home_page.dart';
 import 'package:flutter_chatapp/shared/constants.dart';
