@@ -302,9 +302,11 @@ class _HomePageState extends State<HomePage> {
             return ListView.builder(
                 itemCount: snapshot.data['groups'].length,
                 itemBuilder: (context, index) {
+                  // show the latest created chat
+                  int reverseIndex = snapshot.data['groups'].length - index - 1;
                   return GroupTile(
-                      groupId: getId(snapshot.data['groups'][index]),
-                      groupName: getName(snapshot.data['groups'][index]),
+                      groupId: getId(snapshot.data['groups'][reverseIndex]),
+                      groupName: getName(snapshot.data['groups'][reverseIndex]),
                       userName: snapshot.data['fullName']);
                 });
           }
