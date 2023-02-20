@@ -40,8 +40,8 @@ class DatabaseService {
     DocumentReference groupDocumentReference = await groupCollection.add({
       "groupName": groupName,
       "groupIcon": "",
-      "adim": "${id}_$userName",
-      "member": [],
+      "admin": "${id}_$userName",
+      "members": [],
       "groupId": "",
       "recentMessage": "",
       "recentMessageSender": ""
@@ -49,7 +49,7 @@ class DatabaseService {
 
     // update members
     await groupDocumentReference.update({
-      "member": FieldValue.arrayUnion(["${uid}_$userName"]),
+      "members": FieldValue.arrayUnion(["${uid}_$userName"]),
       "groupId": groupDocumentReference.id
     });
 
@@ -74,5 +74,10 @@ class DatabaseService {
     DocumentReference d = groupCollection.doc(groupId);
     DocumentSnapshot documentSnapshot = await d.get();
     return documentSnapshot['admin'];
+  }
+
+  // get group members
+  getGroupMembers(groupId) async {
+    return groupCollection.doc(groupId).snapshots();
   }
 }

@@ -25,8 +25,8 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void initState() {
-    getChatandAdmin();
     super.initState();
+    getChatandAdmin();
   }
 
   getChatandAdmin() {
@@ -64,7 +64,7 @@ class _ChatPageState extends State<ChatPage> {
                       adminName: admin,
                     ));
               },
-              icon: Icon(Icons.info))
+              icon: Icon(Icons.menu))
         ],
       ),
     );
