@@ -139,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
-                              primary: Theme.of(context).primaryColor),
+                              backgroundColor: Theme.of(context).primaryColor),
                           child: const Text(
                             "Join!",
                             style: TextStyle(
@@ -192,9 +192,9 @@ class _RegisterPageState extends State<RegisterPage> {
           await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveUserEmailSF(email);
           await HelperFunctions.saveUserNameSF(fullName);
-          nextScreenReplace(context, HomePage());
+          nextScreenReplace(context, const HomePage());
         } else {
-          showSnackbar(context, Color.fromARGB(255, 255, 0, 0), value);
+          showSnackbar(context, const Color.fromARGB(255, 255, 0, 0), value);
           setState(() {
             _isLoading = false;
           });

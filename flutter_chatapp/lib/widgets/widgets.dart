@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chatapp/shared/constants.dart';
 
 const textInputDecoration = InputDecoration(
   labelStyle: TextStyle(
@@ -35,7 +34,7 @@ void showSnackbar(context, colour, message) {
     action: SnackBarAction(
       label: "OK",
       onPressed: () {},
-      textColor: Color.fromARGB(255, 255, 255, 255),
+      textColor: const Color.fromARGB(255, 255, 255, 255),
     ),
   ));
 }
