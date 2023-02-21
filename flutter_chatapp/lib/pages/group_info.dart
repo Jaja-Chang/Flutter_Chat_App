@@ -106,6 +106,9 @@ class _GroupInfoState extends State<GroupInfo> {
                   ],
                 ),
               ),
+              const SizedBox(
+                height: 15,
+              ),
               memberList(),
             ],
           ),
@@ -127,7 +130,7 @@ class _GroupInfoState extends State<GroupInfo> {
                 itemBuilder: ((context, index) {
                   return Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 25),
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                     child: ListTile(
                       leading: CircleAvatar(
                         radius: 30,
