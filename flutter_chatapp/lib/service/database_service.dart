@@ -111,6 +111,7 @@ class DatabaseService {
     List<dynamic> groups = await documentSnapshot['groups'];
 
     //if user has our groups then remove them else join
+    print("Member: ${uid}_$userName");
     if (groups.contains("${groupId}_$groupName")) {
       await userDocRef.update({
         "groups": FieldValue.arrayRemove(["${groupId}_$groupName"])

@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chatapp/pages/home_page.dart';
 import 'package:flutter_chatapp/service/database_service.dart';
+import 'package:flutter_chatapp/widgets/widgets.dart';
 
 class GroupInfo extends StatefulWidget {
   final String groupId;
@@ -57,7 +59,48 @@ class _GroupInfoState extends State<GroupInfo> {
                 fontWeight: FontWeight.w300,
                 color: Color.fromARGB(255, 255, 255, 255))),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.exit_to_app))
+          IconButton(
+              onPressed: () {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Leave"),
+                        content: const Text(
+                            "Are you sure you want to leave the chat?"),
+                        actions: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.cancel,
+                                color: Color.fromARGB(255, 255, 0, 0)),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              DatabaseService(
+                                      uid: FirebaseAuth
+                                          .instance.currentUser!.uid)
+                                  .toggleGroupJoin(
+                                      widget.groupId,
+                                      widget.groupName,
+                                      // I don't think that is admin name
+                                      getName(widget.adminName))
+                                  .whenComplete(() {
+                                // print("On group info");
+                                // print("Admin: ${widget.adminName}");
+                                nextScreenReplace(context, const HomePage());
+                              });
+                            },
+                            icon: const Icon(Icons.exit_to_app,
+                                color: Color.fromARGB(255, 0, 230, 150)),
+                          )
+                        ],
+                      );
+                    });
+              },
+              icon: const Icon(Icons.exit_to_app))
         ],
       ),
       body: Container(
