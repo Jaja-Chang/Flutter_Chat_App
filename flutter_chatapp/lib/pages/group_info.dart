@@ -36,6 +36,7 @@ class _GroupInfoState extends State<GroupInfo> {
     });
   }
 
+  // string manipulation
   String getName(String res) {
     return res.substring(res.indexOf("_") + 1);
   }
@@ -153,15 +154,13 @@ class _GroupInfoState extends State<GroupInfo> {
                     ),
                   );
                 }));
-          } else {
-            return const Center(child: Text("NO MEMBERS"));
           }
-        } else {
-          return Center(
-              child: CircularProgressIndicator(
-            color: Theme.of(context).primaryColor,
-          ));
+          return const Center(child: Text("NO MEMBERS"));
         }
+        return Center(
+            child: CircularProgressIndicator(
+          color: Theme.of(context).primaryColor,
+        ));
       },
     );
   }
