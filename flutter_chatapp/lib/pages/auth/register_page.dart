@@ -201,7 +201,5 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       });
     }
-    // ignore: avoid_print
-    print("There is something wrong with the formkey.");
   }
 }

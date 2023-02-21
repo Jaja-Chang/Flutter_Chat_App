@@ -67,7 +67,6 @@ class _LoginPageState extends State<LoginPage> {
                         onChanged: (val) {
                           setState(() {
                             email = val;
-                            print(email);
                           });
                         },
 
@@ -106,7 +105,6 @@ class _LoginPageState extends State<LoginPage> {
                         onChanged: (val) {
                           setState(() {
                             password = val;
-                            print(password);
                           });
                         },
                       ),
@@ -187,7 +185,5 @@ class _LoginPageState extends State<LoginPage> {
         }
       });
     }
-    // ignore: avoid_print
-    print("There is something wrong with the formkey.");
   }
 }
