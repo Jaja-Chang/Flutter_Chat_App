@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chatapp/pages/chat_page.dart';
 import 'package:flutter_chatapp/service/database_service.dart';
 import 'package:flutter_chatapp/widgets/widgets.dart';
 
@@ -203,7 +204,31 @@ class _SearchPageState extends State<SearchPage> {
         style: const TextStyle(fontWeight: FontWeight.w300),
       ),
       trailing: InkWell(
-        onTap: () async {},
+        onTap: () async {
+          await DatabaseService(uid: user!.uid)
+              .toggleGroupJoin(groupId, groupName, userName);
+          // weird
+          if (_isJoined) {
+            setState(() {
+              _isJoined = !_isJoined;
+            });
+            showSnackbar(
+                context, Colors.green, "Successfully joined the chat!");
+            Future.delayed(const Duration(seconds: 2), () {
+              nextScreen(
+                  context,
+                  ChatPage(
+                      groupId: groupId,
+                      groupName: groupName,
+                      userName: userName));
+            });
+          } else {
+            setState(() {
+              _isJoined = !_isJoined;
+            });
+            showSnackbar(context, Colors.red, "Successfully left the chat!");
+          }
+        },
         child: _isJoined
             ? Container(
                 alignment: Alignment.center,
