@@ -8,11 +8,13 @@ class GroupInfo extends StatefulWidget {
   final String groupId;
   final String groupName;
   final String adminName;
+  final String userName;
   const GroupInfo(
       {Key? key,
       required this.groupId,
       required this.groupName,
-      required this.adminName})
+      required this.adminName,
+      required this.userName})
       : super(key: key);
 
   @override
@@ -85,8 +87,7 @@ class _GroupInfoState extends State<GroupInfo> {
                                   .toggleGroupJoin(
                                       widget.groupId,
                                       widget.groupName,
-                                      // I don't think that is admin name
-                                      getName(widget.adminName))
+                                      getName(widget.userName))
                                   .whenComplete(() {
                                 // print("On group info");
                                 // print("Admin: ${widget.adminName}");

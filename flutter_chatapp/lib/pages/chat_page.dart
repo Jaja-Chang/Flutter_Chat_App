@@ -62,6 +62,7 @@ class _ChatPageState extends State<ChatPage> {
                       groupId: widget.groupId,
                       groupName: widget.groupName,
                       adminName: admin,
+                      userName: widget.userName,
                     ));
                 print("On chat page");
                 print("Admin: ${admin}");
