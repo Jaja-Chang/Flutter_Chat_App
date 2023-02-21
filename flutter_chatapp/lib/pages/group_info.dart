@@ -89,8 +89,6 @@ class _GroupInfoState extends State<GroupInfo> {
                                       widget.groupName,
                                       getName(widget.userName))
                                   .whenComplete(() {
-                                // print("On group info");
-                                // print("Admin: ${widget.adminName}");
                                 nextScreenReplace(context, const HomePage());
                               });
                             },
