@@ -23,24 +23,24 @@ class _MessageTileState extends State<MessageTile> {
       padding: EdgeInsets.only(
           top: 4,
           bottom: 4,
-          left: widget.sentByMe ? 0 : 24,
-          right: widget.sentByMe ? 24 : 0),
+          left: widget.sentByMe ? 0 : 10,
+          right: widget.sentByMe ? 10 : 0),
       child: Container(
         margin: widget.sentByMe
             ? const EdgeInsets.only(left: 80)
             : const EdgeInsets.only(right: 80),
         padding:
-            const EdgeInsets.only(top: 17, bottom: 17, left: 20, right: 20),
+            const EdgeInsets.only(top: 15, bottom: 15, left: 18, right: 18),
         decoration: BoxDecoration(
             borderRadius: widget.sentByMe
                 ? const BorderRadius.only(
-                    topLeft: Radius.circular(45),
-                    topRight: Radius.circular(45),
-                    bottomLeft: Radius.circular(45))
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(30))
                 : const BorderRadius.only(
-                    topLeft: Radius.circular(45),
-                    topRight: Radius.circular(45),
-                    bottomRight: Radius.circular(45)),
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                    bottomRight: Radius.circular(30)),
             color: widget.sentByMe
                 ? Theme.of(context).primaryColor
                 : Colors.black45),
@@ -61,10 +61,10 @@ class _MessageTileState extends State<MessageTile> {
             ),
             Text(
               widget.message,
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.w300),
             )
           ],
