@@ -63,10 +63,12 @@ class DatabaseService {
 
   // get the chats
   getChats(String groupId) async {
+    // set descending to "true" so it can be used with "CustomerCrollView" on
+    // the chat page to scroll to the latest message
     return groupCollection
         .doc(groupId)
         .collection("messages")
-        .orderBy("time")
+        .orderBy("time", descending: true)
         .snapshots();
   }
 

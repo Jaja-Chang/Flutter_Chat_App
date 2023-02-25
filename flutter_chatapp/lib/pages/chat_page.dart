@@ -24,11 +24,13 @@ class _ChatPageState extends State<ChatPage> {
   String admin = "";
   Stream<QuerySnapshot>? chats;
   TextEditingController messageController = TextEditingController();
+  // ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     getChatandAdmin();
+    // scrollController = ScrollController();
   }
 
   getChatandAdmin() {
@@ -132,15 +134,24 @@ class _ChatPageState extends State<ChatPage> {
       stream: chats,
       builder: (context, AsyncSnapshot snapshot) {
         return snapshot.hasData
-            ? ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (context, index) {
-                  return MessageTile(
-                      message: snapshot.data.docs[index]['message'],
-                      sender: snapshot.data.docs[index]['sender'],
-                      sentByMe: widget.userName ==
-                          snapshot.data.docs[index]['sender']);
-                },
+            // "CustomerCrollView" is used with reverse set to "true" so the
+            // chat page always scroll to the latest message
+            ? CustomScrollView(
+                reverse: true,
+                // controller: scrollController,
+                slivers: [
+                  SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return MessageTile(
+                          message: snapshot.data.docs[index]['message'],
+                          sender: snapshot.data.docs[index]['sender'],
+                          sentByMe: widget.userName ==
+                              snapshot.data.docs[index]['sender']);
+                    },
+                    childCount: snapshot.data!.docs.length,
+                  )),
+                ],
               )
             : Container();
       },
