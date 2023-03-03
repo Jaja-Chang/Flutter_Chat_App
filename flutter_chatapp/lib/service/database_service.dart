@@ -89,6 +89,10 @@ class DatabaseService {
     return groupCollection.where("groupName", isEqualTo: groupName).get();
   }
 
+  searchGroups() {
+    return groupCollection.get();
+  }
+
   // check if the user has already joined the group
   Future<bool> isUserJoined(
       String groupName, String groupId, String userName) async {

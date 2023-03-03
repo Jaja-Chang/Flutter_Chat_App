@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,9 @@ class _SearchPageState extends State<SearchPage> {
   bool hasUserSearched = false;
   bool _isLoading = false;
   bool _isJoined = false;
+
+  // autocomplete
+  List<String> groupNameOptions = [];
 
   // user name from SF
   String userName = "";
@@ -48,6 +53,15 @@ class _SearchPageState extends State<SearchPage> {
     return res.substring(res.indexOf("_") + 1);
   }
 
+  List<String> getOptions(QuerySnapshot querySnapshot) {
+    // List<String> placeholder = [];
+
+    return querySnapshot.docs
+        .map((e) => e['groupName'].toString().toLowerCase())
+        .toList();
+    // return placeholder;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,58 +84,68 @@ class _SearchPageState extends State<SearchPage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      controller: searchController,
-                      style: const TextStyle(color: Colors.black54),
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            initiateSearchMethod();
-                          },
-                          icon: Icon(
-                            Icons.search,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 1),
-                            borderRadius: BorderRadius.circular(30)),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 1),
-                            borderRadius: BorderRadius.circular(30)),
-                        errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 1),
-                            borderRadius: BorderRadius.circular(30)),
-                        hintText: "Search Chats ... ",
-                        hintStyle: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w300),
-                      ),
-                    ),
+                    child: Autocomplete<String>(optionsBuilder:
+                        (TextEditingValue textEditingValue) async {
+                      await DatabaseService().searchGroups().then((snapshots) {
+                        setState(() {
+                          groupNameOptions = getOptions(snapshots);
+
+                          // searchSnapshot = snapshots;
+                        });
+                      });
+                      // groupNameOptions.forEach((element) {
+                      //   debugPrint(element);
+                      // });
+                      debugPrint('input: ' + textEditingValue.text);
+                      if (textEditingValue.text == '') {
+                        return const Iterable.empty();
+                      }
+                      return groupNameOptions.where((element) {
+                        debugPrint("optoin: " + element);
+                        bool isContained = element
+                            .contains(textEditingValue.text.toLowerCase());
+                        debugPrint('isContained: ' + isContained.toString());
+                        return isContained;
+                        // return element
+                        //     .contains(textEditingValue.text.toLowerCase());
+                      });
+                    }),
+                    // TextField(
+                    //   controller: searchController,
+                    //   style: const TextStyle(color: Colors.black54),
+                    //   decoration: InputDecoration(
+                    //     suffixIcon: IconButton(
+                    //       onPressed: () {
+                    //         initiateSearchMethod();
+                    //       },
+                    //       icon: Icon(
+                    //         Icons.search,
+                    //         color: Theme.of(context).primaryColor,
+                    //       ),
+                    //     ),
+                    //     focusedBorder: OutlineInputBorder(
+                    //         borderSide: BorderSide(
+                    //             color: Theme.of(context).primaryColor,
+                    //             width: 1),
+                    //         borderRadius: BorderRadius.circular(30)),
+                    //     enabledBorder: OutlineInputBorder(
+                    //         borderSide: BorderSide(
+                    //             color: Theme.of(context).primaryColor,
+                    //             width: 1),
+                    //         borderRadius: BorderRadius.circular(30)),
+                    //     errorBorder: OutlineInputBorder(
+                    //         borderSide: BorderSide(
+                    //             color: Theme.of(context).primaryColor,
+                    //             width: 1),
+                    //         borderRadius: BorderRadius.circular(30)),
+                    //     hintText: "Search Chats ... ",
+                    //     hintStyle: TextStyle(
+                    //         color: Theme.of(context).primaryColor,
+                    //         fontSize: 16,
+                    //         fontWeight: FontWeight.w300),
+                    //   ),
+                    // ),
                   ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     initiateSearchMethod();
-                  //   },
-                  //   child: Container(
-                  //     width: 40,
-                  //     height: 40,
-                  //     decoration: BoxDecoration(
-                  //         color: Colors.white.withOpacity(0.2),
-                  //         borderRadius: BorderRadius.circular(40)),
-                  //     child: const Icon(
-                  //       Icons.search,
-                  //       color: Colors.white,
-                  //     ),
-                  //   ),
-                  // )
                 ],
               ),
             ),
