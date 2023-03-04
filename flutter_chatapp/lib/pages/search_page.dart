@@ -17,7 +17,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  TextEditingController searchController = TextEditingController();
+  // final formKey = GlobalKey<FormState>();
+  // TextEditingController searchController = TextEditingController();
   QuerySnapshot? searchSnapshot;
   bool hasUserSearched = false;
   bool _isLoading = false;
@@ -25,6 +26,7 @@ class _SearchPageState extends State<SearchPage> {
 
   // autocomplete
   List<String> groupNameOptions = [];
+  String selectedGroup = "";
 
   // user name from SF
   String userName = "";
@@ -54,12 +56,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   List<String> getOptions(QuerySnapshot querySnapshot) {
-    // List<String> placeholder = [];
-
-    return querySnapshot.docs
-        .map((e) => e['groupName'].toString().toLowerCase())
-        .toList();
-    // return placeholder;
+    return querySnapshot.docs.map((e) => e['groupName'].toString()).toList();
   }
 
   @override
@@ -84,32 +81,84 @@ class _SearchPageState extends State<SearchPage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Autocomplete<String>(optionsBuilder:
-                        (TextEditingValue textEditingValue) async {
-                      await DatabaseService().searchGroups().then((snapshots) {
-                        setState(() {
-                          groupNameOptions = getOptions(snapshots);
-
-                          // searchSnapshot = snapshots;
+                    child: Autocomplete<String>(
+                      // key: formKey,
+                      optionsBuilder:
+                          (TextEditingValue textEditingValue) async {
+                        // to ensure "hasUserSearched" is false when searching otherwise
+                        // options can't be selected
+                        hasUserSearched = false;
+                        await DatabaseService()
+                            .searchGroups()
+                            .then((snapshots) {
+                          setState(() {
+                            groupNameOptions = getOptions(snapshots);
+                          });
                         });
-                      });
-                      // groupNameOptions.forEach((element) {
-                      //   debugPrint(element);
-                      // });
-                      debugPrint('input: ' + textEditingValue.text);
-                      if (textEditingValue.text == '') {
-                        return const Iterable.empty();
-                      }
-                      return groupNameOptions.where((element) {
-                        debugPrint("optoin: " + element);
-                        bool isContained = element
-                            .contains(textEditingValue.text.toLowerCase());
-                        debugPrint('isContained: ' + isContained.toString());
-                        return isContained;
-                        // return element
-                        //     .contains(textEditingValue.text.toLowerCase());
-                      });
-                    }),
+                        if (textEditingValue.text == '') {
+                          return const Iterable.empty();
+                        }
+                        return groupNameOptions.where((element) {
+                          String lowerCaseChar =
+                              textEditingValue.text.toLowerCase();
+                          String upperCaseChar =
+                              textEditingValue.text.toUpperCase();
+
+                          // TODO: It seems to run mutiple times
+                          // TODO: Match the input with chat names (using if else)
+                          return element.contains(
+                              RegExp("[$lowerCaseChar$upperCaseChar]"));
+                        });
+                      },
+                      onSelected: (selection) {
+                        setState(() {
+                          selectedGroup = selection;
+                          debugPrint("selectedGroup: $selectedGroup");
+                          debugPrint("selection: $selection");
+                        });
+                        // initiateSearchMethod(selectedGroup);
+                      },
+                      fieldViewBuilder: (context, textEditingController,
+                          focusNode, VoidCallback onFieldSubmitted) {
+                        return TextField(
+                          controller: textEditingController,
+                          focusNode: focusNode,
+                          style: const TextStyle(color: Colors.black54),
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                initiateSearchMethod();
+                              },
+                              icon: Icon(
+                                Icons.search,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 1),
+                                borderRadius: BorderRadius.circular(30)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 1),
+                                borderRadius: BorderRadius.circular(30)),
+                            errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 1),
+                                borderRadius: BorderRadius.circular(30)),
+                            hintText: "Search Chats ... ",
+                            hintStyle: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300),
+                          ),
+                        );
+                      },
+                    ),
+
                     // TextField(
                     //   controller: searchController,
                     //   style: const TextStyle(color: Colors.black54),
@@ -161,21 +210,37 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   initiateSearchMethod() async {
-    if (searchController.text.isNotEmpty) {
+    if (selectedGroup.isNotEmpty) {
       setState(() {
         _isLoading = true;
       });
-      await DatabaseService()
-          .searchByName(searchController.text)
-          .then((snapshot) {
+      await DatabaseService().searchByName(selectedGroup).then((snapshot) {
         setState(() {
           searchSnapshot = snapshot;
           _isLoading = false;
           hasUserSearched = true;
+          selectedGroup = "";
         });
       });
     }
   }
+
+  // initiateSearchMethod() async {
+  //   if (searchController.text.isNotEmpty) {
+  //     setState(() {
+  //       _isLoading = true;
+  //     });
+  //     await DatabaseService()
+  //         .searchByName(searchController.text)
+  //         .then((snapshot) {
+  //       setState(() {
+  //         searchSnapshot = snapshot;
+  //         _isLoading = false;
+  //         hasUserSearched = true;
+  //       });
+  //     });
+  //   }
+  // }
 
   groupList() {
     return hasUserSearched
@@ -293,4 +358,10 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
+
+  // @override
+  // void dispose() {
+  //   searchController.clear();
+
+  // }
 }
