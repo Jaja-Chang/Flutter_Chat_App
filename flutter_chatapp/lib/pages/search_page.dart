@@ -17,8 +17,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  // final formKey = GlobalKey<FormState>();
-  // TextEditingController searchController = TextEditingController();
   QuerySnapshot? searchSnapshot;
   bool hasUserSearched = false;
   bool _isLoading = false;
@@ -76,13 +74,11 @@ class _SearchPageState extends State<SearchPage> {
         body: Column(
           children: [
             Container(
-              // color: Theme.of(context).primaryColor,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
               child: Row(
                 children: [
                   Expanded(
                     child: Autocomplete<String>(
-                      // key: formKey,
                       optionsBuilder:
                           (TextEditingValue textEditingValue) async {
                         // to ensure "hasUserSearched" is false when searching otherwise
@@ -113,10 +109,7 @@ class _SearchPageState extends State<SearchPage> {
                       onSelected: (selection) {
                         setState(() {
                           selectedGroup = selection;
-                          debugPrint("selectedGroup: $selectedGroup");
-                          debugPrint("selection: $selection");
                         });
-                        // initiateSearchMethod(selectedGroup);
                       },
                       fieldViewBuilder: (context, textEditingController,
                           focusNode, VoidCallback onFieldSubmitted) {
@@ -158,42 +151,6 @@ class _SearchPageState extends State<SearchPage> {
                         );
                       },
                     ),
-
-                    // TextField(
-                    //   controller: searchController,
-                    //   style: const TextStyle(color: Colors.black54),
-                    //   decoration: InputDecoration(
-                    //     suffixIcon: IconButton(
-                    //       onPressed: () {
-                    //         initiateSearchMethod();
-                    //       },
-                    //       icon: Icon(
-                    //         Icons.search,
-                    //         color: Theme.of(context).primaryColor,
-                    //       ),
-                    //     ),
-                    //     focusedBorder: OutlineInputBorder(
-                    //         borderSide: BorderSide(
-                    //             color: Theme.of(context).primaryColor,
-                    //             width: 1),
-                    //         borderRadius: BorderRadius.circular(30)),
-                    //     enabledBorder: OutlineInputBorder(
-                    //         borderSide: BorderSide(
-                    //             color: Theme.of(context).primaryColor,
-                    //             width: 1),
-                    //         borderRadius: BorderRadius.circular(30)),
-                    //     errorBorder: OutlineInputBorder(
-                    //         borderSide: BorderSide(
-                    //             color: Theme.of(context).primaryColor,
-                    //             width: 1),
-                    //         borderRadius: BorderRadius.circular(30)),
-                    //     hintText: "Search Chats ... ",
-                    //     hintStyle: TextStyle(
-                    //         color: Theme.of(context).primaryColor,
-                    //         fontSize: 16,
-                    //         fontWeight: FontWeight.w300),
-                    //   ),
-                    // ),
                   ),
                 ],
               ),
@@ -224,23 +181,6 @@ class _SearchPageState extends State<SearchPage> {
       });
     }
   }
-
-  // initiateSearchMethod() async {
-  //   if (searchController.text.isNotEmpty) {
-  //     setState(() {
-  //       _isLoading = true;
-  //     });
-  //     await DatabaseService()
-  //         .searchByName(searchController.text)
-  //         .then((snapshot) {
-  //       setState(() {
-  //         searchSnapshot = snapshot;
-  //         _isLoading = false;
-  //         hasUserSearched = true;
-  //       });
-  //     });
-  //   }
-  // }
 
   groupList() {
     return hasUserSearched
@@ -327,8 +267,6 @@ class _SearchPageState extends State<SearchPage> {
                   borderRadius: BorderRadius.circular(30),
                   color: Colors.black38,
                 ),
-                // padding:
-                //     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: const Text(
                   "Joined",
                   style: TextStyle(
@@ -345,8 +283,6 @@ class _SearchPageState extends State<SearchPage> {
                   borderRadius: BorderRadius.circular(30),
                   color: Theme.of(context).primaryColor.withOpacity(0.7),
                 ),
-                // padding:
-                //     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: const Text(
                   "Join",
                   style: TextStyle(
@@ -358,10 +294,4 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
-
-  // @override
-  // void dispose() {
-  //   searchController.clear();
-
-  // }
 }
