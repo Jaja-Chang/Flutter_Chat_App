@@ -1,4 +1,4 @@
-# flutter_chatapp
+# Flutter Chatapp
 
 An app allows friends to chat with each other. 
 
